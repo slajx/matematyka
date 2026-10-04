@@ -1,2 +1,2 @@
 # matematyka
-Matematyczna wyprawa — trening mnożenia i dzielenia dla klasy 4.
+Matematyczna wyprawa — trening mnożenia i dzielenia dla wszystkich.
