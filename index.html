@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pl">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matematyczna wyprawa — klasa 4</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#192c46;font-family:system-ui,sans-serif;font-size:18px}main{max-width:720px;margin:40px auto;padding:24px}header p{color:#52647b}h1{font-size:clamp(28px,5vw,40px);margin-bottom:8px}h2{margin-top:0}.card{background:white;border:1px solid #dce4ef;border-radius:24px;padding:28px;margin-top:24px;box-shadow:0 12px 40px #193c6410}.eyebrow{font-size:14px;font-weight:700;letter-spacing:2px;color:#52647b}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}label{display:block;font-weight:600}select,input,button{font:inherit;border-radius:12px;min-height:48px}select,input{width:100%;padding:12px;border:1px solid #aab8ca;background:white;color:#192c46;margin-top:8px}button{padding:12px 20px;border:0;background:#2659cc;color:white;font-weight:650;cursor:pointer}button.secondary{background:#edf2fa;color:#24446e}button:disabled{opacity:.5;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #eea522;outline-offset:3px}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.question{font-size:clamp(40px,9vw,64px);font-weight:750;text-align:center;margin:30px 0}.meta{display:flex;justify-content:space-between;gap:12px;font-size:16px}progress{width:100%;height:10px;accent-color:#2659cc;margin-top:16px}.answer{max-width:240px;margin:auto;text-align:center}.answer input{text-align:center;font-size:28px}#feedback{padding-top:20px;min-height:50px;font-weight:600}#hintText{line-height:1.6;color:#40577b}.good{color:#167045}.bad{color:#a33e21}.big{font-size:48px;font-weight:750;margin:8px 0}li{margin:12px 0;line-height:1.5}.small{font-size:15px;color:#52647b}footer{font-size:14px;text-align:center;color:#52647b;margin-top:24px}[hidden]{display:none!important}@media(max-width:520px){main{margin:12px auto;padding:16px}.card{padding:20px}.grid{grid-template-columns:1fr}}
+.timer{margin-top:16px;font-weight:700;font-variant-numeric:tabular-nums}.meta{flex-wrap:wrap}
+button.danger{background:#b42332;color:white}
+</style>
+<main>
+<header><div class="eyebrow">KLASA 4 · LICZYMY DO 100</div><h1>Matematyczna wyprawa</h1><p>Ćwicz małymi krokami i sprawdź, co już umiesz.</p></header>
+<section id="setup" class="card"><h2>Wybierz swoją rundę</h2><div class="grid">
+<label>Działania<select id="operation"><option value="both">Mnożenie i dzielenie</option><option value="mul">Mnożenie</option><option value="div">Dzielenie</option></select></label>
+<label>Liczba zadań<select id="count"><option>10</option><option>20</option><option>30</option></select></label>
+<label>Zakres zadań<select id="range"><option value="5">Do 5</option><option value="10">Do 10</option><option value="20">Do 20</option><option value="30">Do 30</option><option value="40">Do 40</option><option value="50">Do 50</option><option value="60">Do 60</option><option value="70">Do 70</option><option value="80">Do 80</option><option value="90">Do 90</option><option value="100" selected>Do 100</option></select></label>
+<label>Sposób nauki<select id="mode"><option value="practice">Trening z podpowiedziami</option><option value="test">Próbna kartkówka</option></select></label>
+</div><p class="small">Tabliczka mnożenia od 0 do 10. Wyniki mnożenia i liczby dzielone nie przekraczają wybranego zakresu. Przy małym zakresie i długiej rundzie niektóre działania mogą się powtarzać. Dzielenie bez reszty i bez dzielenia przez zero.</p><p class="small">W treningu od razu zobaczysz poprawną odpowiedź, a licznik pokaże czas nauki — bez limitu. Na całą kartkówkę masz 10 minut. Po upływie czasu sprawdzimy zapisane odpowiedzi. Niezapisane zadania liczą się jako brak odpowiedzi.</p><div class="actions"><button id="start">Zaczynam!</button></div></section>
+<section id="quiz" class="card" hidden><div class="meta"><span id="position"></span><span id="modeLabel"></span><span id="rangeLabel"></span></div><div id="timer" class="timer" role="timer" aria-live="off"></div><progress id="progress" value="0" max="10" aria-label="Ukończone zadania"></progress><div class="question" id="question"></div>
+<form id="form" novalidate><div class="answer"><label for="answer">Twoja odpowiedź</label><input id="answer" type="text" inputmode="numeric" autocomplete="off" maxlength="3" aria-describedby="feedback"></div><div id="feedback" aria-live="polite"></div><div id="hintText" aria-live="polite"></div><div class="actions"><button id="submit" type="submit">Sprawdź</button><button id="hint" type="button" class="secondary">Podpowiedź</button><button id="next" type="button" hidden>Dalej →</button><button id="stop" type="button" class="danger">Przerwij</button></div></form></section>
+<section id="result" class="card" hidden><h2>Runda ukończona!</h2><div id="score" class="big"></div><div id="gradePanel" hidden><h3 id="grade"></h3><details class="small"><summary>Skala ocen</summary><p>1: 0–34% · 2: 35–49% · 3: 50–74% · 4: 75–89% · 5: 90–99% · 6: 100%.</p><p>Źródło: statut SP im. Adama Mickiewicza w Ujkowicach, przesłane wersje z 2025 r. i ze zmianami z 17.09.2026 r. Ocena za tę próbną kartkówkę.</p><p>Przy wyniku ułamkowym obowiązuje dolny próg oceny, bez zaokrąglania w górę. Każde zadanie jest warte 1 punkt; brak odpowiedzi to 0 punktów.</p></details></div><p id="message"></p><p id="helpInfo" class="small"></p><h3 id="reviewHeading">Do powtórki</h3><ul id="review"></ul><div class="actions"><button id="retry">Poćwicz błędy</button><button id="restart" class="secondary">Nowa runda</button></div></section>
+<p id="memoryStatus" class="small" aria-live="polite"></p>
+<footer>Działa bez internetu. Postępy są zapisywane tylko w tej przeglądarce. Odpowiedzi nie są nigdzie wysyłane.</footer>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+let questions=[],records=[],index=0,locked=false,assisted=false,mode='practice';
+const MEMORY_KEY='matematyczna-wyprawa-learning-v1';
+let learning={},storageAvailable=true;
+function questionKey(q){return `${q.op}:${q.a}:${q.b}`;}
+function loadLearning(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(MEMORY_KEY)||'{}');
+    if(!saved||typeof saved!=='object'||Array.isArray(saved))return;
+    for(const q of [...pool('mul'),...pool('div')]){
+      const key=questionKey(q),value=saved[key];
+      if(Number.isInteger(value)&&value>0&&value<=6)learning[key]=value;
+    }
+  }catch{storageAvailable=false;}
+}
+function memoryStatus(){
+  const count=Object.keys(learning).length;
+  $('memoryStatus').textContent=`Zapamiętane trudne działania: ${count}. Trening częściej losuje działania z błędami na kartkówkach. Poprawne odpowiedzi bez podpowiedzi stopniowo zmniejszają częstotliwość powtórek. `+(storageAvailable?'Pamięć pozostaje po zamknięciu strony.':'Zapis w przeglądarce jest niedostępny — pamięć działa tylko do zamknięcia lub odświeżenia strony.');
+}
+function rememberAnswer(q,value,usedHint,answerMode){
+  const key=questionKey(q),old=learning[key]||0;
+  if(value!==q.result){
+    if(answerMode==='test'||old>0)learning[key]=Math.min(6,old+3);
+  }else if(old>0&&!usedHint){
+    if(old===1)delete learning[key];else learning[key]=old-1;
+  }
+  try{localStorage.setItem(MEMORY_KEY,JSON.stringify(learning));storageAvailable=true;}catch{storageAvailable=false;}
+  memoryStatus();
+}
+function weightedSample(candidates,n){
+  const available=[...candidates],selected=[];
+  while(selected.length<n&&available.length){
+    const weights=available.map(q=>1+4*(learning[questionKey(q)]||0));
+    let ticket=Math.random()*weights.reduce((a,b)=>a+b,0),pick=weights.length-1;
+    for(let i=0;i<weights.length;i++){ticket-=weights[i];if(ticket<0){pick=i;break;}}
+    selected.push(available.splice(pick,1)[0]);
+  }
+  return selected;
+}
+const LIMIT_MS=10*60*1000;
+let startedAt=0,timerId=null,active=false;
+function formatTime(ms){const seconds=Math.floor(ms/1000);return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`;}
+function elapsed(){return Math.max(0,Date.now()-startedAt);}
+function updateTimer(){if(!active)return;const used=elapsed();const remaining=Math.max(0,LIMIT_MS-used);$('timer').textContent=mode==='test'?`Pozostały czas: ${formatTime(Math.ceil(remaining/1000)*1000)}`:`Czas treningu: ${formatTime(used)}`;$('timer').className='timer'+(mode==='test'&&remaining<=60000?' bad':'');if(mode==='test'&&used>=LIMIT_MS)finish(true);}
+document.addEventListener('visibilitychange',updateTimer);
+function shuffle(items){for(let i=items.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[items[i],items[j]]=[items[j],items[i]];}return items;}
+function pool(op,range=100){const out=[];for(let a=0;a<=Math.min(10,range);a++)for(let b=op==='div'?1:0;b<=Math.min(10,range);b++){if(a*b<=range)out.push(op==='mul'?{a,b,op,result:a*b}:{a:a*b,b,op,result:a});}return out;}
+function makeQuestions(op,n,questionMode='test',range=100){
+  const sample=(type,count)=>{
+    const candidates=pool(type,range),selected=[];
+    while(selected.length<count){
+      const batch=questionMode==='practice'?weightedSample(candidates,Math.min(count-selected.length,candidates.length)):shuffle([...candidates]).slice(0,count-selected.length);
+      selected.push(...batch);
+    }
+    return selected;
+  };
+  const result=op==='both'?shuffle([...sample('mul',Math.ceil(n/2)),...sample('div',Math.floor(n/2))]):sample(op,n);
+  // Small ranges may need another pass through the pool; separate identical neighbours.
+  for(let i=1;i<result.length;i++)if(questionKey(result[i])===questionKey(result[i-1])){
+    const j=result.findIndex((q,k)=>k>i&&questionKey(q)!==questionKey(result[i-1]));
+    if(j>=0)[result[i],result[j]]=[result[j],result[i]];
+  }
+  return result;
+}
+function expression(q){return q.a+(q.op==='mul'?' × ':' : ')+q.b;}
+function showPanel(id){for(const name of ['setup','quiz','result'])$(name).hidden=name!==id;}
+function begin(list,newMode){clearInterval(timerId);questions=list;mode=newMode;records=[];index=0;startedAt=Date.now();active=true;showPanel('quiz');render();updateTimer();timerId=setInterval(updateTimer,250);}
+function render(){locked=false;assisted=false;const q=questions[index];$('position').textContent=`Zadanie ${index+1} z ${questions.length}`;$('modeLabel').textContent=mode==='test'?'Próbna kartkówka':'Trening';$('progress').max=questions.length;$('progress').value=index;$('question').textContent=expression(q)+' = ?';$('answer').value='';$('answer').disabled=false;$('feedback').textContent='';$('feedback').className='';$('hintText').textContent='';$('hint').hidden=mode==='test';$('hint').disabled=false;$('submit').hidden=false;$('submit').textContent=mode==='test'?'Zapisz odpowiedź':'Sprawdź';$('next').hidden=true;$('answer').focus();}
+function hint(q){if(q.op==='div')return `Pomyśl: ${q.b} × jaka liczba = ${q.a}?`;if(q.a===0||q.b===0)return 'Mnożenie przez zero zawsze daje zero.';if(q.b===1)return 'Mnożenie przez 1 nie zmienia liczby.';return `Dodaj liczbę ${q.a} do siebie ${q.b} razy: ${Array(q.b).fill(q.a).join(' + ')}.`;}
+function gradeFor(correct,total){
+  const percent=100*correct/total;
+  if(correct===total)return '6 — celujący';
+  if(percent>=90)return '5 — bardzo dobry';
+  if(percent>=75)return '4 — dobry';
+  if(percent>=50)return '3 — dostateczny';
+  if(percent>=35)return '2 — dopuszczający';
+  return '1 — niedostateczny';
+}
+function finish(timedOut=false){if(!active)return;active=false;locked=true;clearInterval(timerId);timerId=null;const duration=mode==='test'?Math.min(elapsed(),LIMIT_MS):elapsed();for(let i=records.length;i<questions.length;i++)records.push({q:questions[i],value:null,assisted:false});showPanel('result');const correct=records.filter(r=>r.value===r.q.result).length;const helped=records.filter(r=>r.assisted).length;const wrong=records.filter(r=>r.value!==r.q.result);const missing=records.filter(r=>r.value===null).length;$('gradePanel').hidden=mode!=='test';$('grade').textContent=mode==='test'?'Ocena: '+gradeFor(correct,records.length):'';$('score').textContent=`${correct} / ${records.length}`;$('message').textContent=(timedOut?'Czas minął! Kartkówka zakończona. ':'')+(correct===records.length?'Świetnie! Wszystkie odpowiedzi są poprawne.':correct>=records.length*.7?'Dobra robota! Jeszcze trochę ćwiczeń i będzie coraz łatwiej.':'Masz za sobą ważny krok. Przećwiczmy teraz trudniejsze działania!');$('helpInfo').textContent=`Czas: ${formatTime(duration)}. Poprawne odpowiedzi: ${Math.round(correct/records.length*100)}%. Zadania z podpowiedzią: ${helped}. Bez odpowiedzi: ${missing}.`;$('review').replaceChildren();$('reviewHeading').textContent=wrong.length?'Te działania warto powtórzyć':'Wszystkie działania rozwiązane poprawnie';for(const r of wrong){const li=document.createElement('li');li.textContent=`${expression(r.q)} = ${r.q.result} — ${r.value===null?'brak zapisanej odpowiedzi':'Twoja odpowiedź: '+r.value}`;$('review').append(li);}$('retry').hidden=wrong.length===0;$('restart').focus();}
+function advance(){index++;if(index===questions.length)finish();else render();}
+$('start').onclick=()=>{const range=Number($('range').value);$('rangeLabel').textContent=`Zakres: do ${range}`;begin(makeQuestions($('operation').value,Number($('count').value),$('mode').value,range),$('mode').value);};
+$('hint').onclick=()=>{assisted=true;$('hintText').textContent=hint(questions[index]);$('hint').disabled=true;$('answer').focus();};
+$('form').onsubmit=e=>{e.preventDefault();if(!active||locked)return;if(mode==='test'&&elapsed()>=LIMIT_MS){finish(true);return;}const raw=$('answer').value.trim();if(!/^\d{1,3}$/.test(raw)||Number(raw)>100){$('feedback').textContent='Wpisz liczbę całkowitą od 0 do 100.';$('feedback').className='bad';$('answer').focus();return;}locked=true;const q=questions[index],value=Number(raw);records.push({q,value,assisted});rememberAnswer(q,value,assisted,mode);if(mode==='test'){advance();return;}const ok=value===q.result;$('feedback').textContent=ok?'Dobrze! Tak trzymaj.':`Tym razem się nie udało. ${expression(q)} = ${q.result}.`;$('feedback').className=ok?'good':'bad';if(!ok)$('hintText').textContent=q.op==='div'?`Sprawdzenie: ${q.b} × ${q.result} = ${q.a}.`:hint(q);$('answer').disabled=true;$('submit').hidden=true;$('hint').hidden=true;$('next').hidden=false;$('next').textContent=index===questions.length-1?'Zobacz wynik':'Następne zadanie →';$('next').focus();};
+$('next').onclick=advance;
+$('stop').onclick=()=>{active=false;locked=true;clearInterval(timerId);timerId=null;questions=[];records=[];index=0;showPanel('setup');$('start').focus();};
+$('retry').onclick=()=>begin(shuffle(records.filter(r=>r.value!==r.q.result).map(r=>r.q)),'practice');
+$('restart').onclick=()=>{showPanel('setup');$('start').focus();};
+loadLearning();
+memoryStatus();
+</script>
+</html>
+
